@@ -28,16 +28,19 @@ export class PropertyController {
     return this.propertyService.create(createPropertyDto, req);
   }
 
+  @ApiBearerAuth()
   @Get()
   findAll() {
     return this.propertyService.findAll();
   }
 
+  @ApiBearerAuth()
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.propertyService.findOne(id);
   }
 
+  @ApiBearerAuth()
   @Patch(':id')
   update(
     @Param('id') id: string,
@@ -46,6 +49,7 @@ export class PropertyController {
     return this.propertyService.update(id, updatePropertyDto);
   }
 
+  @ApiBearerAuth()
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.propertyService.remove(id);

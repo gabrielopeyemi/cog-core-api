@@ -7,6 +7,8 @@ import { PropertyModule } from './property/property.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AuthMiddleware } from './middleware/auth.middleware';
 import { PropertyController } from './property/property.controller';
+import { LandlordModule } from './landlord/landlord.module';
+import { LandlordController } from './landlord/landlord.controller';
 
 @Module({
   imports: [
@@ -16,12 +18,13 @@ import { PropertyController } from './property/property.controller';
     UserModule,
     AuthModule,
     PropertyModule,
+    LandlordModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(AuthMiddleware).exclude('').forRoutes(PropertyController);
+    consumer.apply(AuthMiddleware).exclude('').forRoutes(PropertyController, LandlordController);
   }
 }
