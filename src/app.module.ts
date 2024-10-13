@@ -3,7 +3,6 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
-import { PropectModule } from './propect/propect.module';
 import { PropertyModule } from './property/property.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AuthMiddleware } from './middleware/auth.middleware';
@@ -16,7 +15,6 @@ import { PropertyController } from './property/property.controller';
     ),
     UserModule,
     AuthModule,
-    PropectModule,
     PropertyModule,
   ],
   controllers: [AppController],
