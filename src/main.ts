@@ -1,14 +1,26 @@
 import { NestFactory } from '@nestjs/core';
-import { SwaggerModule, DocumentBuilder, SwaggerCustomOptions } from '@nestjs/swagger';
+import {
+  SwaggerModule,
+  DocumentBuilder,
+  SwaggerCustomOptions,
+} from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import * as dotenv from 'dotenv';
 
-dotenv.config(); 
+dotenv.config();
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const port = process.env.PORT || 4000;
+
+  // Enable CORS
+  app.enableCors({
+    origin: '*', // Allow all origins. You can restrict it to specific origins if needed.
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    allowedHeaders: 'Content-Type, Accept, Authorization',
+    credentials: true, // Enable credentials if your frontend needs it.
+  });
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -27,14 +39,15 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
 
-    const customOptions: SwaggerCustomOptions = {
-      swaggerOptions: {
-        persistAuthorization: true,
-      },
-      customSiteTitle: `Documentation for COG-API`,
-    };
+  const customOptions: SwaggerCustomOptions = {
+    swaggerOptions: {
+      persistAuthorization: true,
+    },
+    customSiteTitle: 'Documentation for COG-API',
+  };
 
   SwaggerModule.setup('api-docs', app, document, customOptions);
+
   console.log(`This application is running on: ${port}`);
   await app.listen(port);
 }
