@@ -9,18 +9,57 @@ export enum LandlordType {
 export type LandlordDocument = Landlord & Document;
 
 @Schema()
+export class PropertyDetails {
+  @Prop()
+  status: string; // 'new' or 'existing'
+}
+
+@Schema()
+export class ScheduledPayout {
+  @Prop()
+  amount: number;
+
+  @Prop()
+  startDate: string; // ISO date string
+
+  @Prop()
+  duration: string; // e.g., '12 months'
+
+  @Prop()
+  frequency: string; // e.g., 'monthly'
+
+  @Prop()
+  accountNumber: string;
+
+  @Prop()
+  accountName: string;
+
+  @Prop()
+  bankName: string;
+}
+
+@Schema()
 export class Landlord {
   @Prop({ enum: LandlordType })
-  landlordType: LandlordType;
+  type: LandlordType;
 
   @Prop()
-  landlordName: string;
+  name: string;
 
   @Prop()
-  landlordAddress: string;
+  address: string;
 
   @Prop()
-  landlordNumber: string;
+  email: string;
+
+  @Prop()
+  phoneNumber: string;
+
+  @Prop({ type: PropertyDetails})
+  propertyDetails: PropertyDetails;
+
+  @Prop({ type: ScheduledPayout })
+  scheduledPayouts: ScheduledPayout;
 }
 
 export const LandlordSchema = SchemaFactory.createForClass(Landlord);

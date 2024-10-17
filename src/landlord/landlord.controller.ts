@@ -42,3 +42,5 @@ export class LandlordController {
     return this.landlordService.remove(id);
   }
 }
+
+
