@@ -7,12 +7,13 @@ export type UnitDocument = Unit & Document;
 export type LandlordDocument = Landlord & Document;
 export type PropertyManagerDocument = PropertyManager & Document;
 
+// Unit Schema
 @Schema()
 class Unit {
-  @Prop({ required: true })
+  @Prop()
   amount: string;
 
-  @Prop({ required: true })
+  @Prop()
   unitName: string;
 
   @Prop({ default: false })
@@ -86,22 +87,34 @@ class Unit {
 }
 const UnitSchema = SchemaFactory.createForClass(Unit);
 
+// Landlord Schema
 @Schema()
 class Landlord {
   @Prop({ required: true })
   landlordType: string;
 
   @Prop({ required: true })
-  landlordName: string;
+  name: string;
 
   @Prop()
-  landlordAddress: string;
+  address: string;
 
   @Prop({ required: true })
-  landlordNumber: string;
+  email: string;
+
+  @Prop({ required: true })
+  phoneNumber: string;
+
+  @Prop({
+    type: {
+      propertyStatus: String,
+    },
+  })
+  propertyDetails: Record<string, string>;
 }
 const LandlordSchema = SchemaFactory.createForClass(Landlord);
 
+// Property Manager Schema
 @Schema()
 class PropertyManager {
   @Prop({ required: true })
@@ -110,7 +123,7 @@ class PropertyManager {
   @Prop()
   address: string;
 
-  @Prop({ required: true })
+  @Prop()
   number: string;
 
   @Prop({ default: false })
@@ -133,28 +146,32 @@ class PropertyManager {
 }
 const PropertyManagerSchema = SchemaFactory.createForClass(PropertyManager);
 
+// Property Schema
 @Schema({ timestamps: true })
 export class Property {
   @Prop({
     type: {
       propertyName: String,
       applicationType: String,
-      typeOfProperty: String,
-      propertyAddress: String,
       propertyState: String,
       paymentStyle: String,
+      units: [UnitSchema],
     },
-    required: true,
   })
-  property: Record<string, string>;
+  property: Record<string, any>;
 
-  @Prop({ type: [UnitSchema], required: true })
-  units: Unit[];
+  @Prop({
+    type: {
+      typeOfProperty: String,
+      propertyAddress: String,
+    },
+  })
+  general: Record<string, string>;
 
-  @Prop({ type: LandlordSchema, required: true })
-  landlord: Landlord;
+  @Prop()
+  landlordId: string;
 
-  @Prop({ type: PropertyManagerSchema, required: true })
-  propertyManager: PropertyManager;
+  @Prop({ type: [PropertyManagerSchema] })
+  propertyManager: PropertyManager[];
 }
 export const PropertySchema = SchemaFactory.createForClass(Property);

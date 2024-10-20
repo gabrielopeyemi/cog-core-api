@@ -13,6 +13,7 @@ export class LandlordService {
   ) {}
 
   async create(createLandlordDto: CreateLandlordDto) {
+    
     const createdLandlord = new this.landlordModel(createLandlordDto);
     return createdLandlord.save();
   }

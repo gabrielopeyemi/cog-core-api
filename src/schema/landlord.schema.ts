@@ -57,9 +57,6 @@ export class Landlord {
 
   @Prop({ type: PropertyDetails})
   propertyDetails: PropertyDetails;
-
-  @Prop({ type: ScheduledPayout })
-  scheduledPayouts: ScheduledPayout;
 }
 
 export const LandlordSchema = SchemaFactory.createForClass(Landlord);

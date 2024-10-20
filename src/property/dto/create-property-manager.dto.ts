@@ -20,7 +20,6 @@ export class CreatePropertyManagerDto {
 
   @ApiProperty()
   @IsString()
-  @IsPhoneNumber(null)
   number: string;
 
   @ApiProperty()

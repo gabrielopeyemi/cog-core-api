@@ -1,18 +1,16 @@
 // src/property/dto/create-property-details.dto.ts
 
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum, IsString } from 'class-validator';
+import { ArrayMinSize, IsArray, IsEnum, IsString, ValidateNested } from 'class-validator';
+import { CreateUnitDto } from './create-unit.dto';
+import { Type } from 'class-transformer';
 
 export enum ApplicationType {
   RENTAL = 'RENTAL',
   SALE = 'SALE', // Add other types if applicable
 }
 
-export enum TypeOfProperty {
-  FLAT = 'FLAT',
-  HOUSE = 'HOUSE',
-  // Add other types as needed
-}
+
 
 export enum PaymentStyle {
   OFF_PLAN = 'OFF_PLAN',
@@ -20,27 +18,34 @@ export enum PaymentStyle {
 }
 
 export class CreatePropertyDetailsDto {
-  @ApiProperty()
+  @ApiProperty({
+    default: 'Two bedroom apartmentt'
+  })
   @IsString()
   propertyName: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    default: ApplicationType.SALE
+  })
   @IsEnum(ApplicationType)
   applicationType: ApplicationType;
 
-  @ApiProperty()
-  @IsEnum(TypeOfProperty)
-  typeOfProperty: TypeOfProperty;
-
-  @ApiProperty()
-  @IsString()
-  propertyAddress: string;
-
-  @ApiProperty()
+  @ApiProperty({
+    default: 'New'
+  })
   @IsString()
   propertyState: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    default: PaymentStyle.OFF_PLAN
+  })
   @IsEnum(PaymentStyle)
   paymentStyle: PaymentStyle;
+
+  @ApiProperty({ type: [CreateUnitDto] })
+  @IsArray()
+  @ArrayMinSize(1)
+  @ValidateNested({ each: true })
+  @Type(() => CreateUnitDto)
+  units: CreateUnitDto[];
 }

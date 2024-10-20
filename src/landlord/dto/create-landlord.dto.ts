@@ -76,7 +76,4 @@ export class CreateLandlordDto {
   @IsObject()
   propertyDetails: PropertyDetailsDto;
 
-  @ApiProperty()
-  @IsObject()
-  scheduledPayouts: ScheduledPayoutDto;
 }
