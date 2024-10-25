@@ -42,6 +42,12 @@ export class CreateUserDto {
   @IsNotEmpty()
   password: string;
 
+  @ApiProperty({
+    default: 'Adewale@12',
+  })
+  @IsString()
+  @IsNotEmpty()
+  comfirmPassword: string;
 
   @ApiProperty({
     default: '+2347045678902',
@@ -56,4 +62,10 @@ export class CreateUserDto {
   @IsOptional()
   userType?: UserType;
 
+  @ApiProperty({
+    default: Role.CLIENT,
+  })
+  @IsEnum(Role)
+  @IsOptional()
+  role?: Role;
 }
