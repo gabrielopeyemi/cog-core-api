@@ -69,10 +69,6 @@ export class CreateLandlordDto {
   @IsString()
   address: string;
 
-  @ApiProperty({ example: 'john.oluwadeji@example.com' })
-  @IsEmail()
-  email: string;
-
   @ApiProperty({ example: '+2348190234799' })
   @IsString()
   phoneNumber: string;

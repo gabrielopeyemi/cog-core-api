@@ -100,9 +100,6 @@ class Landlord {
   address: string;
 
   @Prop({ required: true })
-  email: string;
-
-  @Prop({ required: true })
   phoneNumber: string;
 
   @Prop({
