@@ -52,7 +52,7 @@ export class PropertyService {
         entityId: property._id,
         entityType: 'Property',
         activityType: 'Created',
-        description: `Property was just created with landlord ${createdLandlord.name}.`,
+        description: `Property ${property.property.propertyName} created with landlord ${createdLandlord.name}.`,
       });
 
       return {
