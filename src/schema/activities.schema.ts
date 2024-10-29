@@ -11,7 +11,7 @@ export class Activity {
   entityId: string; // ID of the landlord or property associated with the activity
 
   @Prop({ required: true })
-  entityType: string; // 'Landlord' or 'Property' to distinguish activity type
+  entityType: 'Landlord' | 'Property'; //  to distinguish activity type
 
   @Prop({ required: true })
   activityType: string; // Type of activity, e.g., 'Created', 'Updated', etc.
