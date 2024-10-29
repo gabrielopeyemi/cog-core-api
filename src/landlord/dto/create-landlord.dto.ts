@@ -6,6 +6,7 @@ import {
   IsObject,
   IsOptional,
   IsNumber,
+  IsDateString,
 } from 'class-validator';
 
 export enum LandlordType {
@@ -16,7 +17,41 @@ export enum LandlordType {
 export class PropertyDetailsDto {
   @ApiProperty({ example: 'new' })
   @IsString()
-  propertyStatus: string; // Either 'new' or 'existing'
+  propertyStatus: string;
+
+  @ApiProperty({ example: ['dsvweECSVFSECZSX', 'ABCD1234XYZ'], isArray: true })
+  @IsString({ each: true })
+  propertyId: string[];
+}
+
+class ScheduledPayouts {
+  @ApiProperty({ example: 1000 })
+  @IsNumber()
+  amount: number;
+
+  @ApiProperty({ example: '2024-01-01' })
+  @IsDateString()
+  startDate: string;
+
+  @ApiProperty({ example: 12 })
+  @IsNumber()
+  duration: number; // in months
+
+  @ApiProperty({ example: 'monthly' })
+  @IsString()
+  frequency: string; // e.g., 'monthly', 'quarterly'
+
+  @ApiProperty({ example: '123456789' })
+  @IsString()
+  accountNumber: string;
+
+  @ApiProperty({ example: 'John Doe' })
+  @IsString()
+  accountName: string;
+
+  @ApiProperty({ example: 'Bank of Springfield' })
+  @IsString()
+  bankName: string;
 }
 
 export class ScheduledPayoutDto {
@@ -76,4 +111,6 @@ export class CreateLandlordDto {
   @IsObject()
   propertyDetails: PropertyDetailsDto;
 
+  @ApiProperty({ type: ScheduledPayouts })
+  scheduledPayouts: ScheduledPayouts;
 }

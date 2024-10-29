@@ -106,11 +106,13 @@ class Landlord {
   phoneNumber: string;
 
   @Prop({
-    type: {
-      propertyStatus: String,
-    },
+    type: [
+      {
+        propertyStatus: String,
+      },
+    ],
   })
-  propertyDetails: Record<string, string>;
+  propertyID: Record<string, string>[];
 }
 const LandlordSchema = SchemaFactory.createForClass(Landlord);
 
@@ -146,6 +148,32 @@ class PropertyManager {
 }
 const PropertyManagerSchema = SchemaFactory.createForClass(PropertyManager);
 
+// Payout Schema
+@Schema()
+class Payout {
+  @Prop({ required: true })
+  amount: string;
+
+  @Prop({ required: true })
+  startDate: Date;
+
+  @Prop()
+  duration: string;
+
+  @Prop({ required: true })
+  frequency: string;
+
+  @Prop({ required: true })
+  accountNumber: string;
+
+  @Prop({ required: true })
+  accountName: string;
+
+  @Prop({ required: true })
+  bankName: string;
+}
+const PayoutSchema = SchemaFactory.createForClass(Payout);
+
 // Property Schema
 @Schema({ timestamps: true })
 export class Property {
@@ -173,5 +201,8 @@ export class Property {
 
   @Prop({ type: [PropertyManagerSchema] })
   propertyManager: PropertyManager[];
+
+  @Prop({ type: [PayoutSchema] })
+  scheduledPayouts: Payout[];
 }
 export const PropertySchema = SchemaFactory.createForClass(Property);

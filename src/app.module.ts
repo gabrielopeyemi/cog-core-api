@@ -9,6 +9,7 @@ import { AuthMiddleware } from './middleware/auth.middleware';
 import { PropertyController } from './property/property.controller';
 import { LandlordModule } from './landlord/landlord.module';
 import { LandlordController } from './landlord/landlord.controller';
+import { ActivitiesModule } from './activities/activities.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { LandlordController } from './landlord/landlord.controller';
     AuthModule,
     PropertyModule,
     LandlordModule,
+    ActivitiesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
