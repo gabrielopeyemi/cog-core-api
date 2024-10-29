@@ -24,37 +24,7 @@ export class PropertyDetailsDto {
   propertyId: string[];
 }
 
-class ScheduledPayouts {
-  @ApiProperty({ example: 1000 })
-  @IsNumber()
-  amount: number;
-
-  @ApiProperty({ example: '2024-01-01' })
-  @IsDateString()
-  startDate: string;
-
-  @ApiProperty({ example: 12 })
-  @IsNumber()
-  duration: number; // in months
-
-  @ApiProperty({ example: 'monthly' })
-  @IsString()
-  frequency: string; // e.g., 'monthly', 'quarterly'
-
-  @ApiProperty({ example: '123456789' })
-  @IsString()
-  accountNumber: string;
-
-  @ApiProperty({ example: 'John Doe' })
-  @IsString()
-  accountName: string;
-
-  @ApiProperty({ example: 'Bank of Springfield' })
-  @IsString()
-  bankName: string;
-}
-
-export class ScheduledPayoutDto {
+class ScheduledPayout {
   @ApiProperty({ example: 100000 })
   @IsNumber()
   amount: number;
@@ -111,6 +81,7 @@ export class CreateLandlordDto {
   @IsObject()
   propertyDetails: PropertyDetailsDto;
 
-  @ApiProperty({ type: ScheduledPayouts })
-  scheduledPayouts: ScheduledPayouts;
+  @ApiProperty({ type: ScheduledPayout })
+  @IsObject()
+  scheduledPayout: ScheduledPayout;
 }

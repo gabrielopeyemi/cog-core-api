@@ -12,6 +12,7 @@ export class LandlordController {
   @ApiBearerAuth()
   @Post()
   create(@Body() createLandlordDto: CreateLandlordDto) {
+    console.log({ createLandlordDto });
     return this.landlordService.create(createLandlordDto);
   }
 

@@ -1,56 +1,27 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreatePropertyDto } from './dto/create-property.dto';
 import { UpdatePropertyDto } from './dto/update-property.dto';
 import { InjectModel } from '@nestjs/mongoose';
-import { LandlordDocument, Property, PropertyDocument } from 'src/schema/property.schema';
+import {
+  LandlordDocument,
+  Property,
+  PropertyDocument,
+} from 'src/schema/property.schema';
 import { Model } from 'mongoose';
 import { Landlord } from 'src/schema/landlord.schema';
+import { ActivitiesService } from 'src/activities/activities.service';
 
 @Injectable()
 export class PropertyService {
   constructor(
     @InjectModel(Property.name) private propertyModel: Model<PropertyDocument>,
     @InjectModel(Landlord.name) private landlordModel: Model<LandlordDocument>,
+    private activitiesService: ActivitiesService,
   ) {}
-
-  // async create(createPropertyDto: CreatePropertyDto, req: any) {
-  //   const { landlord, ...rest } = createPropertyDto;
-
-  //   // Start a session
-  //   const session = await this.propertyModel.db.startSession();
-  //   session.startTransaction();
-
-  //   try {
-  //     // Create landlord document within the session
-  //     const createdLandlord = await this.landlordModel.create([landlord], {
-  //       session,
-  //     });
-
-  //     // Create property document and link landlord's ID
-  //     const createdProperty = new this.propertyModel({
-  //       ...rest,
-  //       landlordId: createdLandlord[0]._id,
-  //     });
-
-  //     // Save the property within the session
-  //     const property = await createdProperty.save({ session });
-
-  //     // Commit the transaction
-  //     await session.commitTransaction();
-
-  //     return {
-  //       ...property.toObject(),
-  //       landlord: createdLandlord[0],
-  //     };
-  //   } catch (error) {
-  //     // Abort the transaction in case of an error
-  //     await session.abortTransaction();
-  //     throw new BadRequestException('Failed to create property');
-  //   } finally {
-  //     // End the session
-  //     session.endSession();
-  //   }
-  // }
 
   async create(createPropertyDto: CreatePropertyDto, req: any) {
     const { landlord, ...rest } = createPropertyDto;
@@ -75,6 +46,14 @@ export class PropertyService {
       // Commit the transaction
       await session.commitTransaction();
 
+      // Log activity for property creation
+      await this.activitiesService.create({
+        entityId: property._id,
+        entityType: 'Property',
+        activityType: 'Created',
+        description: `Property ${newProperty.property} created with landlord ${createdLandlord.name}.`,
+      });
+
       return {
         ...property.toObject(),
         landlord: createdLandlord.toObject(),
@@ -91,11 +70,14 @@ export class PropertyService {
   }
 
   async findAll() {
-    return await this.propertyModel.find().populate({
-      path: 'landlordId',
-      model: this.landlordModel, 
-      select: '-password -__v',
-    }).exec();
+    return await this.propertyModel
+      .find()
+      .populate({
+        path: 'landlordId',
+        model: this.landlordModel,
+        select: '-password -__v',
+      })
+      .exec();
   }
 
   async findOne(id: string) {
@@ -114,8 +96,17 @@ export class PropertyService {
       })
       .exec();
     if (!updatedProperty) {
-      throw new NotFoundException(`User with ID "${id}" not found`);
+      throw new NotFoundException(`Property with ID "${id}" not found`);
     }
+
+    // Log activity for property update
+    await this.activitiesService.create({
+      entityId: updatedProperty._id,
+      entityType: 'Property',
+      activityType: 'Updated',
+      description: `Property ${updatedProperty?.property} updated.`,
+    });
+
     return updatedProperty;
   }
 
@@ -126,6 +117,15 @@ export class PropertyService {
     if (!deletedProperty) {
       throw new NotFoundException(`Property with ID "${id}" not found`);
     }
+
+    // Log activity for property deletion
+    await this.activitiesService.create({
+      entityId: deletedProperty._id,
+      entityType: 'Property',
+      activityType: 'Deleted',
+      description: `Property ${deletedProperty?.property} deleted.`,
+    });
+
     return deletedProperty;
   }
 }
