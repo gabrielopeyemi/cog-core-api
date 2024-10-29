@@ -11,14 +11,17 @@ import { ActivitiesService } from 'src/activities/activities.service';
 @Injectable()
 export class LandlordService {
   constructor(
-    @InjectModel(Landlord.name) 
+    @InjectModel(Landlord.name)
     private landlordModel: Model<LandlordDocument>,
     private activitiesService: ActivitiesService,
   ) {}
 
   // Create a new landlord and log the activity
-  async create(createLandlordDto: CreateLandlordDto) {
-    const createdLandlord = new this.landlordModel(createLandlordDto);
+  async create(createLandlordDto: CreateLandlordDto, creatorId) {
+    const createdLandlord = new this.landlordModel({
+      ...createLandlordDto,
+      creatorId,
+    });
     const savedLandlord = await createdLandlord.save();
 
     // Log activity
@@ -33,8 +36,8 @@ export class LandlordService {
   }
 
   // Find all landlords
-  async findAll() {
-    return await this.landlordModel.find().exec();
+  async findAll(creatorId: string) {
+    return await this.landlordModel.find({ creatorId }).exec();
   }
 
   // Find a landlord by ID

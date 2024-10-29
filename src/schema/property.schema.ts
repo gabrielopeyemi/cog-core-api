@@ -198,6 +198,9 @@ export class Property {
 
   @Prop()
   landlordId: string;
+  
+  @Prop()
+  creatorId: string;
 
   @Prop({ type: [PropertyManagerSchema] })
   propertyManager: PropertyManager[];

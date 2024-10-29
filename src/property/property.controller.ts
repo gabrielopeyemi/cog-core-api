@@ -30,8 +30,8 @@ export class PropertyController {
 
   @ApiBearerAuth()
   @Get()
-  findAll() {
-    return this.propertyService.findAll();
+  findAll(@Request() req: RequestWithEmail) {
+    return this.propertyService.findAll(req.user._id);
   }
 
   @ApiBearerAuth()

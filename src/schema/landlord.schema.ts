@@ -60,6 +60,9 @@ export class Landlord {
 
   @Prop()
   scheduledPayout: ScheduledPayout;
+
+  @Prop()
+  creatorId: string;
 }
 
 export const LandlordSchema = SchemaFactory.createForClass(Landlord);

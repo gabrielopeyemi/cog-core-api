@@ -39,6 +39,7 @@ export class PropertyService {
       const newProperty = new this.propertyModel({
         ...rest,
         landlordId: createdLandlord._id,
+        creatorId: req._id
       });
 
       const property = await newProperty.save({ session });
@@ -69,9 +70,11 @@ export class PropertyService {
     }
   }
 
-  async findAll() {
+  async findAll(userId: string) {
     return await this.propertyModel
-      .find()
+      .find({
+        creatorId: userId
+      })
       .populate({
         path: 'landlordId',
         model: this.landlordModel,
