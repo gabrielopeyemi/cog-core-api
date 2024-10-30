@@ -30,6 +30,7 @@ export class LandlordService {
       entityType: 'Landlord',
       activityType: 'Created',
       description: `Landlord ${savedLandlord.name} created.`,
+      creatorId,
     });
 
     return savedLandlord;
@@ -50,7 +51,7 @@ export class LandlordService {
   }
 
   // Update a landlord and log the activity
-  async update(id: string, updateLandlordDto: UpdateLandlordDto) {
+  async update(id: string, updateLandlordDto: UpdateLandlordDto, creatorId: string) {
     const updatedLandlord = await this.landlordModel
       .findByIdAndUpdate(id, updateLandlordDto, {
         new: true,
@@ -68,6 +69,7 @@ export class LandlordService {
       entityType: 'Landlord',
       activityType: 'Updated',
       description: `Landlord ${updatedLandlord.name} updated.`,
+      creatorId,
     });
 
     return updatedLandlord;

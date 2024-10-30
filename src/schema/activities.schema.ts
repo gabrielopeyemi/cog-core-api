@@ -21,6 +21,9 @@ export class Activity {
 
   @Prop({ type: Date, default: Date.now })
   timestamp: Date; // Timestamp of when the activity occurred
+
+  @Prop()
+  creatorId: string; // Timestamp of when the activity occurred
 }
 
 // Create schema from the Activity class

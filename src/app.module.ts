@@ -10,6 +10,7 @@ import { PropertyController } from './property/property.controller';
 import { LandlordModule } from './landlord/landlord.module';
 import { LandlordController } from './landlord/landlord.controller';
 import { ActivitiesModule } from './activities/activities.module';
+import { ActivitiesController } from './activities/activities.controller';
 
 @Module({
   imports: [
@@ -27,6 +28,9 @@ import { ActivitiesModule } from './activities/activities.module';
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(AuthMiddleware).exclude('').forRoutes(PropertyController, LandlordController);
+    consumer
+      .apply(AuthMiddleware)
+      .exclude('')
+      .forRoutes(PropertyController, LandlordController, ActivitiesController);
   }
 }

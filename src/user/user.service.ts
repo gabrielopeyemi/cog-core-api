@@ -12,13 +12,18 @@ export class UserService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
   // Create a new user
   async create(createUserDto: CreateUserDto): Promise<User> {
+
+    //TODO: 
     const existingUser = await this.userModel.findOne({
       email: createUserDto.email.toLowerCase(),
     });
     if (existingUser) {
       throw new BadRequestException('Email already in use');
     }
-    const createdUser = new this.userModel(createUserDto);
+    const createdUser = new this.userModel({
+      ...createUserDto,
+      email: createUserDto.email.toLowerCase(),
+    });
     return createdUser.save();
   }
 

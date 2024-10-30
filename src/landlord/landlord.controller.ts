@@ -30,8 +30,9 @@ export class LandlordController {
 
   @ApiBearerAuth()
   @Get()
-  findAll(@Request() req: RequestWithEmail) {
-    return this.landlordService.findAll(req.user._id);
+  async findAll(@Request() req: RequestWithEmail) {
+    console.log({ 'req.user': req.user });
+    return await this.landlordService.findAll(req.user._id);
   }
 
   @ApiBearerAuth()
@@ -45,8 +46,9 @@ export class LandlordController {
   update(
     @Param('id') id: string,
     @Body() updateLandlordDto: UpdateLandlordDto,
+    @Request() req: RequestWithEmail,
   ) {
-    return this.landlordService.update(id, updateLandlordDto);
+    return this.landlordService.update(id, updateLandlordDto, req.user._id);
   }
 
   @ApiBearerAuth()

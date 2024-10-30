@@ -31,7 +31,8 @@ export class PropertyController {
   @ApiBearerAuth()
   @Get()
   findAll(@Request() req: RequestWithEmail) {
-    return this.propertyService.findAll(req.user._id);
+    console.log({ 'req.user': req.user });
+    return this.propertyService.findAll(req.user.details._id);
   }
 
   @ApiBearerAuth()
@@ -45,8 +46,9 @@ export class PropertyController {
   update(
     @Param('id') id: string,
     @Body() updatePropertyDto: UpdatePropertyDto,
+    @Request() req: RequestWithEmail,
   ) {
-    return this.propertyService.update(id, updatePropertyDto);
+    return this.propertyService.update(id, updatePropertyDto, req.user._id);
   }
 
   @ApiBearerAuth()

@@ -25,6 +25,7 @@ export class PropertyService {
 
   async create(createPropertyDto: CreatePropertyDto, req: any) {
     const { landlord, ...rest } = createPropertyDto;
+    console.log({ 'req.user': req.user });
 
     // Start a session
     const session = await this.propertyModel.db.startSession();
@@ -39,7 +40,7 @@ export class PropertyService {
       const newProperty = new this.propertyModel({
         ...rest,
         landlordId: createdLandlord._id,
-        creatorId: req._id
+        creatorId: req.user.details._id,
       });
 
       const property = await newProperty.save({ session });
@@ -53,6 +54,7 @@ export class PropertyService {
         entityType: 'Property',
         activityType: 'Created',
         description: `Property ${property.property.propertyName} created with landlord ${createdLandlord.name}.`,
+        creatorId: req.user.details._id,
       });
 
       return {
@@ -71,6 +73,7 @@ export class PropertyService {
   }
 
   async findAll(userId: string) {
+    console.log({ userId });
     return await this.propertyModel
       .find({
         creatorId: userId
@@ -91,7 +94,7 @@ export class PropertyService {
     return property;
   }
 
-  async update(id: string, updatePropertyDto: UpdatePropertyDto) {
+  async update(id: string, updatePropertyDto: UpdatePropertyDto, creatorId: string) {
     const updatedProperty = await this.propertyModel
       .findByIdAndUpdate(id, updatePropertyDto, {
         new: true,
@@ -108,6 +111,7 @@ export class PropertyService {
       entityType: 'Property',
       activityType: 'Updated',
       description: `Property ${updatedProperty?.property} updated.`,
+      creatorId,
     });
 
     return updatedProperty;

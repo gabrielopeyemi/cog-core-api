@@ -19,8 +19,10 @@ import { Model } from 'mongoose';
     }
 
     // Find all activities
-    async findAll(type: string): Promise<Activity[]> {
-      return await this.activityModel.find({ entityType: type }).exec();
+    async findAll(type: string, userId: string): Promise<Activity[]> {
+      return await this.activityModel
+        .find({ entityType: type, creatorId: userId })
+        .exec();
     }
 
     // Find a specific activity by ID
